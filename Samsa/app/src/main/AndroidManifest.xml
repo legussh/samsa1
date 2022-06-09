@@ -9,23 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Samsa">
+
         <activity
-            android:name=".Search"
+            android:name=".activity.ShopActivity"
             android:exported="false" />
         <activity
-            android:name=".Ashot"
+            android:name=".activity.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".Piksi"
+            android:name=".activity.CartActivity"
             android:exported="false" />
         <activity
-            android:name=".Shesterochka"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

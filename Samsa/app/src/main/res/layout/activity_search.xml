@@ -4,23 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Search">
+    tools:context=".activity.SearchActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageButton
-            android:id="@+id/button2"
-            android:layout_width="77dp"
-            android:layout_height="49dp"
-            android:layout_weight="0"
-            android:onClick="back"
-            android:src="@drawable/ic__back" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/button2"-->
+<!--            android:layout_width="77dp"-->
+<!--            android:layout_height="49dp"-->
+<!--            android:layout_weight="0"-->
+<!--            android:onClick="back"-->
+<!--            android:src="@drawable/ic__back" />-->
 
         <EditText
-            android:id="@+id/search"
+            android:id="@+id/edit_text_search"
             android:layout_width="match_parent"
             android:layout_height="86dp"
             android:hint="Поиск..."
@@ -31,28 +31,28 @@
             android:layout_height="wrap_content" >
 
             <TextView
-                android:id="@+id/text1"
+                android:id="@+id/text_product"
                 android:layout_width="102dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Название" />
 
             <TextView
-                android:id="@+id/text2"
+                android:id="@+id/text_count"
                 android:layout_width="7dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Количество" />
 
             <TextView
-                android:id="@+id/text3"
+                android:id="@+id/text_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Цена" />
 
             <TextView
-                android:id="@+id/text4"
+                android:id="@+id/text_shop"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -60,7 +60,7 @@
 
         </LinearLayout>
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/list_shop_products"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
