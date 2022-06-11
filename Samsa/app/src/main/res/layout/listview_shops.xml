@@ -6,6 +6,7 @@
     <ImageView
         android:id="@+id/image_shop"
         android:layout_width="match_parent"
-        android:layout_height="134dp" />
+        android:layout_height="134dp"
+        android:background="#D3D3D3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

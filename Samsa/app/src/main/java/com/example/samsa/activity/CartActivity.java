@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.samsa.DatabaseHelper;
@@ -37,6 +38,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+          getWindow().setWindowAnimations(0);
 
         listView = (ListView)findViewById(R.id.list_cart);
         imageShop = (ImageView)findViewById(R.id.image_shop);
@@ -51,7 +53,7 @@ public class CartActivity extends AppCompatActivity {
           if (cursorCart.moveToFirst()) {
               while (!cursorCart.isAfterLast()) {
                   Log.d("hehe", cursorCart.getInt(Cart.NUM_COLUMN_ID) + " " +
-                          cursorCart.getInt(Cart.NUM_COLUMN_NAME_SHOP) + " " +
+                          cursorCart.getString(Cart.NUM_COLUMN_NAME_SHOP) + " " +
                           cursorCart.getString(Cart.NUM_COLUMN_NAME_PRODUCT) + " " +
                           cursorCart.getInt(Cart.NUM_COLUMN_PRICE) + " " +
                           cursorCart.getInt(Cart.NUM_COLUMN_COUNT));
@@ -67,10 +69,21 @@ public class CartActivity extends AppCompatActivity {
                   cursorCart.moveToNext();
               }
           }
+
           CartListAdapter cartListAdapter = new CartListAdapter(this, cartList);
           listView.setAdapter(cartListAdapter);
 
+          OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+              @Override
+              public void handleOnBackPressed() {
+                  Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                  startActivity(intent);
+              }
+          };
 
-    }
+          getOnBackPressedDispatcher().addCallback(this, callback);
+
+          sqLiteDatabase.close();
+      }
 }
 

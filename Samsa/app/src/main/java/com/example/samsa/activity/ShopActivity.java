@@ -70,17 +70,18 @@ public class ShopActivity extends AppCompatActivity {
 
         if (cursorShopProduct.moveToFirst()) {
             while (!cursorShopProduct.isAfterLast()) {
-                Log.d("hehe", cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_NAME_SHOP) + " " +
-                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
+//                Log.d("hehe", cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_NAME_SHOP) + " " +
+//                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
 
                 ShopProduct shopProduct = new ShopProduct(cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID),
                         cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_SHOP),
                         cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT),
                         cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT),
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
+                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE),
+                        sqLiteDatabase);
                 shopProductList.add(shopProduct);
 
                 cursorShopProduct.moveToNext();
@@ -91,6 +92,6 @@ public class ShopActivity extends AppCompatActivity {
         ProductListAdapter productListAdapter = new ProductListAdapter(this, shopProductList, true);
         listShopProducts.setAdapter(productListAdapter);
 
-
+        sqLiteDatabase.close();
     }
 }

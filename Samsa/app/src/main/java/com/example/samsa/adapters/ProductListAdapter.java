@@ -66,6 +66,8 @@ public class ProductListAdapter extends ArrayAdapter<ShopProduct>  {
 
                 Toast toast = Toast.makeText(getContext(), "успешно добавлено" , Toast.LENGTH_SHORT);
                 toast.show();
+
+//                sqLiteDatabase.close();
             }
         });
 

@@ -16,7 +16,7 @@ import com.example.samsa.entity.ShopProduct;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "shops";
-    public static final int DB_VERSION = 14;
+    public static final int DB_VERSION = 30;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -31,35 +31,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Shop.COLUMN_RES + " TEXT NOT NULL);";
         sqLiteDatabase.execSQL(query_shop);
 
-        Shop шестёрочка = new Shop(1, "шестёрочка", R.drawable.ic_shop_shesterochka);
-        Shop пикси = new Shop(2, "пикси", R.drawable.ic_shop_piksi);
-        Shop ашот = new Shop(3, "ашот", R.drawable.ic_shop_ashot);
-
-        createShopValue(шестёрочка, sqLiteDatabase);
-        createShopValue(пикси, sqLiteDatabase);
-        createShopValue(ашот, sqLiteDatabase);
+        Shop шестёрочка = new Shop(1, "шестёрочка", R.drawable.ic_shop_shesterochka, sqLiteDatabase);
+        Shop пикси = new Shop(2, "пикси", R.drawable.ic_shop_piksi, sqLiteDatabase);
+        Shop ашот = new Shop(3, "ашот", R.drawable.ic_shop_ashot, sqLiteDatabase);
 
         String query_product = "CREATE TABLE " + Product.TABLE_NAME + " (" +
                 Product.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 Product.COLUMN_NAME + " TEXT NOT NULL);";
         sqLiteDatabase.execSQL(query_product);
 
-        Product хлеб = new Product(1, "хлеб");
-        Product cabbage = new Product(2, "капуста");
-        Product картошка = new Product(3, "картошка");
-        Product banana = new Product(4, "банан");
-        Product пельмени = new Product(5, "пельмени Сибирская язва");
-        Product pizza = new Product(6, "пицца Как в школьной столовой");
-        Product булочка = new Product(7, "булочка");
-
-        createProductValue(хлеб, sqLiteDatabase);
-        createProductValue(cabbage, sqLiteDatabase);
-        createProductValue(картошка, sqLiteDatabase);
-        createProductValue(banana, sqLiteDatabase);
-        createProductValue(пельмени, sqLiteDatabase);
-        createProductValue(pizza, sqLiteDatabase);
-        createProductValue(булочка, sqLiteDatabase);
-
+        Product хлеб = new Product(1, "хлеб", sqLiteDatabase);
+        Product cabbage = new Product(2, "капуста", sqLiteDatabase);
+        Product картошка = new Product(3, "картошка", sqLiteDatabase);
+        Product banana = new Product(4, "банан", sqLiteDatabase);
+        Product пельмени = new Product(5, "пельмени Сибирская язва", sqLiteDatabase);
+        Product pizza = new Product(6, "пицца Как в школьной столовой", sqLiteDatabase);
+        Product булочка = new Product(7, "булочка", sqLiteDatabase);
 
         String query_shop_product = "CREATE TABLE " + ShopProduct.TABLE_NAME + " (" +
                 ShopProduct.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
@@ -69,19 +56,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 ShopProduct.COLUMN_PRICE + " INTEGER NOT NULL);";
         sqLiteDatabase.execSQL(query_shop_product);
 
-        ShopProduct шестёрочка_хлеб = new ShopProduct(1, 30, 45);
-        ShopProduct шестёрочка_булочка = new ShopProduct(2, 100, 23);
-        ShopProduct пикси_хлеб = new ShopProduct(3, 36, 52);
-        ShopProduct пикси_картошка = new ShopProduct(4, 257, 40);
-        ShopProduct ашот_хлеб = new ShopProduct(5, 62, 47);
-        ShopProduct ашот_пельмени = new ShopProduct(6, 78, 104);
-
-        createShopProductValue(шестёрочка_хлеб, шестёрочка, хлеб, sqLiteDatabase);
-        createShopProductValue(шестёрочка_булочка, шестёрочка, булочка, sqLiteDatabase);
-        createShopProductValue(пикси_хлеб, пикси, хлеб, sqLiteDatabase);
-        createShopProductValue(пикси_картошка, пикси, картошка, sqLiteDatabase);
-        createShopProductValue(ашот_хлеб, ашот, хлеб, sqLiteDatabase);
-        createShopProductValue(ашот_пельмени, ашот, пельмени, sqLiteDatabase);
+        ShopProduct шестёрочка_хлеб = new ShopProduct(1,"шестёрочка", "хлеб", 30, 45, sqLiteDatabase);
+        ShopProduct шестёрочка_булочка = new ShopProduct(2,"шестёрочка", "булочка", 100, 23, sqLiteDatabase);
+        ShopProduct пикси_хлеб = new ShopProduct(3,"пикси", "хлеб", 36, 52, sqLiteDatabase);
+        ShopProduct пикси_картошка = new ShopProduct(4,"пикси", "картошка", 257, 40, sqLiteDatabase);
+        ShopProduct ашот_хлеб = new ShopProduct(5,"ашот", "хлеб", 62, 47, sqLiteDatabase);
+        ShopProduct ашот_пельмени = new ShopProduct(6,"ашот", "пельмени", 78, 104, sqLiteDatabase);
 
         String query_cart = "CREATE TABLE " + Cart.TABLE_NAME + " (" +
                 Cart.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
@@ -101,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(Shop.COLUMN_RES, shop.getRes());
 
         sqLiteDatabase.insert(Shop.TABLE_NAME, null, contentValues);
+//        sqLiteDatabase.close();
     }
 
     public static void createProductValue(Product product, SQLiteDatabase sqLiteDatabase) {
@@ -110,18 +91,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(Product.COLUMN_NAME, product.getName());
 
         sqLiteDatabase.insert(Product.TABLE_NAME, null, contentValues);
+//        sqLiteDatabase.close();
     }
 
-    public static void createShopProductValue(ShopProduct shopProduct, Shop shop, Product product, SQLiteDatabase sqLiteDatabase) {
+    public static void createShopProductValue(ShopProduct shopProduct, SQLiteDatabase sqLiteDatabase) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ShopProduct.COLUMN_ID, shopProduct.getId());
-        contentValues.put(ShopProduct.COLUMN_NAME_SHOP, shop.getName());
-        contentValues.put(ShopProduct.COLUMN_NAME_PRODUCT, product.getName());
+        contentValues.put(ShopProduct.COLUMN_NAME_SHOP, shopProduct.getName_shop());
+        contentValues.put(ShopProduct.COLUMN_NAME_PRODUCT, shopProduct.getName_product());
         contentValues.put(ShopProduct.COLUMN_COUNT, shopProduct.getCount());
         contentValues.put(ShopProduct.COLUMN_PRICE, shopProduct.getPrice());
 
         sqLiteDatabase.insert(ShopProduct.TABLE_NAME, null, contentValues);
+//        sqLiteDatabase.close();
     }
 
     public static void createCartValue(Cart cart, ShopProduct shopProduct, SQLiteDatabase sqLiteDatabase) {
@@ -145,6 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             contentValues.put(Cart.COLUMN_COUNT, cart.getCount() + 1);
         }
         sqLiteDatabase.insert(Cart.TABLE_NAME, null, contentValues);
+        sqLiteDatabase.close();
     }
 
     @Override

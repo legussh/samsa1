@@ -1,5 +1,9 @@
 package com.example.samsa.entity;
 
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.samsa.DatabaseHelper;
+
 public class Product {
     private int id;
     private String name;
@@ -13,9 +17,10 @@ public class Product {
     public static final int NUM_COLUMN_NAME = 1;
 
 
-    public Product(int id, String name) {
+    public Product(int id, String name, SQLiteDatabase sqLiteDatabase) {
         this.id = id;
         this.name = name;
+        DatabaseHelper.createProductValue(this, sqLiteDatabase);
     }
 
     public int getId() {

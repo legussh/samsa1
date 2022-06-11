@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ import com.example.samsa.adapters.ProductListAdapter;
 import com.example.samsa.entity.ShopProduct;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,29 +45,33 @@ public class SearchActivity extends AppCompatActivity {
 
         List<ShopProduct> shopProductList = new ArrayList<ShopProduct>();
 
-        Cursor cursorShopProduct = sqLiteDatabase.query(ShopProduct.TABLE_NAME, null, null, null, null, null, null);
+        if (editTextSearch.getText().toString().equals("")) {
+            Cursor cursorShopProduct = sqLiteDatabase.query(ShopProduct.TABLE_NAME, null, null, null, null, null, null);
 
-        if (cursorShopProduct.moveToFirst()) {
-            while (!cursorShopProduct.isAfterLast()) {
-                Log.d("hehe", cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_NAME_SHOP) + " " +
-                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT) + " " +
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
+            if (cursorShopProduct.moveToFirst()) {
+                while (!cursorShopProduct.isAfterLast()) {
+//                Log.d("hehe", cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_NAME_SHOP) + " " +
+//                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT) + " " +
+//                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
 
-                ShopProduct shopProduct = new ShopProduct(cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID),
-                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_SHOP),
-                        cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT),
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT),
-                        cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE));
-                shopProductList.add(shopProduct);
+//                shopNames.add(cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT));
 
-                cursorShopProduct.moveToNext();
+                    ShopProduct shopProduct = new ShopProduct(cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_ID),
+                            cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_SHOP),
+                            cursorShopProduct.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT),
+                            cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_COUNT),
+                            cursorShopProduct.getInt(ShopProduct.NUM_COLUMN_PRICE),
+                            sqLiteDatabase);
+                    shopProductList.add(shopProduct);
+
+                    cursorShopProduct.moveToNext();
+                }
             }
+            ProductListAdapter productListAdapter = new ProductListAdapter(this, shopProductList, false);
+            listShopProducts.setAdapter(productListAdapter);
         }
-
-        ProductListAdapter productListAdapter = new ProductListAdapter(this, shopProductList, false);
-        listShopProducts.setAdapter(productListAdapter);
 
         editTextSearch.addTextChangedListener(new TextWatcher() {
 
@@ -72,12 +79,39 @@ public class SearchActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                Cursor cursorSearch = sqLiteDatabase.query(ShopProduct.TABLE_NAME, null, ShopProduct.COLUMN_NAME_PRODUCT + " like ?",
+                        new String[]{"%" + editTextSearch.getText().toString() + "%"}, null, null, null);
+
+                List<ShopProduct> searchList = new ArrayList<ShopProduct>();
+
+                if (cursorSearch.moveToFirst()) {
+                    while (!cursorSearch.isAfterLast()) {
+//                Log.d("hehe", cursorSearch.getInt(ShopProduct.NUM_COLUMN_ID) + " " +
+//                        cursorSearch.getInt(ShopProduct.NUM_COLUMN_NAME_SHOP) + " " +
+//                        cursorSearch.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT) + " " +
+//                        cursorSearch.getInt(ShopProduct.NUM_COLUMN_COUNT) + " " +
+//                        cursorSearch.getInt(ShopProduct.NUM_COLUMN_PRICE));
+
+                        ShopProduct shopProduct = new ShopProduct(cursorSearch.getInt(ShopProduct.NUM_COLUMN_ID),
+                                cursorSearch.getString(ShopProduct.NUM_COLUMN_NAME_SHOP),
+                                cursorSearch.getString(ShopProduct.NUM_COLUMN_NAME_PRODUCT),
+                                cursorSearch.getInt(ShopProduct.NUM_COLUMN_COUNT),
+                                (cursorSearch.getInt(ShopProduct.NUM_COLUMN_PRICE)),
+                                sqLiteDatabase);
+                        searchList.add(shopProduct);
+
+                        cursorSearch.moveToNext();
+                    }
+                }
+
+                ProductListAdapter searchAdapter = new ProductListAdapter(SearchActivity.this, searchList, false);
+                listShopProducts.setAdapter(searchAdapter);
+            }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) { }
         });
     }
 }

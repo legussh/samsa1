@@ -24,7 +24,7 @@ public class Cart {
 
     public Cart(){
 
-    };
+    }
 
     public Cart (int id, String name_shop, String name_product, int price, int count) {
         this.id = id;
